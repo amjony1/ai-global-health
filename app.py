@@ -1048,7 +1048,7 @@ def book_appointment(doctor_id):
         if not doctor:
             return "Doctor not found", 404
 
-        # Fetch user's active subscription with checkup points
+        # Fetch user's active subscription with checkup points (optional for free checkups)
         sub_resp = supabase.table("user_subscriptions")\
             .select("*")\
             .eq("user_id", str(current_user.id))\
@@ -1057,9 +1057,6 @@ def book_appointment(doctor_id):
             .limit(1)\
             .execute()
         subscription = sub_resp.data[0] if sub_resp.data else None
-        if not subscription:
-            flash("You need an active subscription to book an appointment.", "danger")
-            return redirect(url_for('plans'))
 
         if request.method == 'POST':
             scheduled_time = request.form.get('scheduled_time')
@@ -1098,6 +1095,8 @@ def book_appointment(doctor_id):
             # Insert appointment
             supabase.from_('appointments').insert({
                 'user_id': str(current_user.id),
+                'user_name': current_user.address.get('full_name') if current_user.address else current_user.name,
+                'user_email': current_user.email,
                 'doctor_id': doctor_id,
                 'scheduled_time': scheduled_time,
                 'status': status,

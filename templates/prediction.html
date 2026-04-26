@@ -248,23 +248,11 @@ function showResultsModal(predictions) {
             "Ensure proper hydration and rest."
         ];
 
-        // Backend will inject the current subscription plan name (if any)
-        const userPlan = "{{ user_plan_name if user_plan_name else '' }}";
-        let actionBtn = "";
-
-        if (userPlan) {
-            // If subscribed → go to that plan's features
-            actionBtn = `<a href="/features/${userPlan}" class="btn btn-lg"
-                            style="background-color:#3d83d7; color:white; border:none;">
-                            View ${userPlan} Features
-                         </a>`;
-        } else {
-            // If not subscribed → go to plans
-            actionBtn = `<a href="/plans" class="btn btn-lg"
-                            style="background-color:#3d83d7; color:white; border:none;">
-                            Consult with a Specialist
-                         </a>`;
-        }
+        // Redirect to doctors page
+        const actionBtn = `<a href="/doctors" class="btn btn-lg"
+                        style="background-color:#3d83d7; color:white; border:none;">
+                        Consult Specialist
+                     </a>`;
 
         const modalHtml = `
         <div class="modal fade" id="resultsModal" tabindex="-1" aria-hidden="true">
